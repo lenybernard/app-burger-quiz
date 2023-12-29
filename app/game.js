@@ -100,6 +100,15 @@ module.exports = function (io) {
             socket.on(messages.messageBuzzBadResponse, function () {
                 io.emit(messages.messageToClientReceiveBadResponse);
             });
+            socket.on(messages.messageBuzzGoodResponse, function () {
+                io.emit(messages.messageToClientReceiveGoodResponse);
+            });
+            socket.on(messages.messageSuspense, function () {
+                io.emit(messages.messageToClientReceiveSuspense);
+            });
+            socket.on(messages.messageYeah, function () {
+                io.emit(messages.messageToClientReceiveYeah);
+            });
 
             /**
              * Se charge d'ajouter ou de retirer des points

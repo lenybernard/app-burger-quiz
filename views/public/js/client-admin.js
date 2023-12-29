@@ -10,6 +10,9 @@ const messageLockBuzz= 'event-lock-buzz';
 const messageUnLockBuzz= 'event-unlock-buzz';
 const messageNextTransition= 'event-next-transition';
 const messageBuzzBadResponse = 'event-bad-response';
+const messageBuzzGoodResponse = 'event-good-response';
+const messageSuspense = 'event-suspense';
+const messageYeah = 'event-yeah';
 const messageClientNeedBuzzHits = 'need-buzz-hits';
 const messageToClientReceiveBuzzHits = 'receive-buzz-hits';
 
@@ -17,7 +20,10 @@ $buttonAddPointMayo = $('#button-add-point-mayo');
 $buttonRemovePointMayo = $('#button-remove-point-mayo');
 $buttonAddPointKetchup = $('#button-add-point-ketchup');
 $buttonRemovePointKetchup = $('#button-remove-point-ketchup');
+$buttonBuzzGoodResponse = $('#button-buzz-good-response');
 $buttonBuzzBadResponse = $('#button-buzz-bad-response');
+$buttonSuspense = $('#button-suspense');
+$buttonYeah = $('#button-yeah');
 
 $buttonLockBuzzer = $('#button-lock-buzz');
 $buttonUnLockBuzzer = $('#button-unlock-buzz');
@@ -56,6 +62,15 @@ var initEvents = function () {
     });
     $buttonBuzzBadResponse.click(function() {
         socket.emit(messageBuzzBadResponse);
+    })
+    $buttonBuzzGoodResponse.click(function() {
+        socket.emit(messageBuzzGoodResponse);
+    })
+    $buttonSuspense.click(function() {
+        socket.emit(messageSuspense);
+    })
+    $buttonYeah.click(function() {
+        socket.emit(messageYeah);
     })
 }
 

@@ -35,13 +35,17 @@ const componentsKetchup = [];
  */
 const mayoColor = '#E0C800';
 const ketchupColor = '#C71000';
+const successColor = '#558833';
 
 /**
  * Sons
  */
 const buzzSound = './sounds/buzz.mp3';
+const yeahSound = './sounds/yeah.mp3';
+const buzzCorrectSound = './sounds/correct.mp3';
 const buzzSoundAie = './sounds/burger-sound-buzz-1.mp3';
 const buzzSoundOutch = './sounds/burger-sound-buzz-2.mp3';
+const suspenseSound = './sounds/suspense.mp3';
 
 /**
  * Prop css convention
@@ -68,6 +72,9 @@ const messageToClientReceivePoints = 'receive-points-teams';
 const messageToClientReceiveBuzz = 'receive-buzz';
 const messageToClientNextTransition = 'receive-next-transition';
 const messageToClientReceiveBadResponse = 'receive-buzz-bad-response';
+const messageToClientReceiveGoodResponse = 'receive-buzz-good-response';
+const messageToClientReceiveSuspense = 'receive-suspense';
+const messageToClientReceiveYeah = 'receive-yeah';
 
 /**
  * Les messages qu'envoie le client
@@ -212,6 +219,20 @@ const receiveBuzzAndInteractOnView = function (teamName) {
     });
 }
 
+const receiveCorrectResponseAndInteractOnView = function () {
+    if (isTransitionRunning)
+        return;
+    const color = successColor;
+    $mainBackground.hide();
+    $modalBuzz.show();
+    $modalBuzz.fadeIn(0, function () {
+        $(this).css('background', color).fadeOut(500, function () {
+            $modalBuzz.hide();
+            $mainBackground.show();
+        });
+    });
+}
+
 /**
  * Affiche une modal pour l'équipe qui aura
  * Buzz en première
@@ -274,6 +295,15 @@ const stopTransitionNow = function () {
  */
 const launchBuzzSound = function () {
     playSound(buzzSound);
+}
+const launchCorrectSound = function () {
+    playSound(buzzCorrectSound);
+}
+const launchSuspenseSound = function () {
+    playSound(suspenseSound);
+}
+const launchYeahSound = function () {
+    playSound(yeahSound);
 }
 
 /**
@@ -364,6 +394,16 @@ const initSocketAndListenEvents = function () {
     });
     socket.on(messageToClientReceiveBadResponse, function () {
         launchBuzzSound();
+    });
+    socket.on(messageToClientReceiveGoodResponse, function () {
+        receiveCorrectResponseAndInteractOnView()
+        launchCorrectSound();
+    });
+    socket.on(messageToClientReceiveSuspense, function () {
+        launchSuspenseSound();
+    });
+    socket.on(messageToClientReceiveYeah, function () {
+        launchYeahSound();
     });
     /**
      * On souhaite connaitre le nombre de points
