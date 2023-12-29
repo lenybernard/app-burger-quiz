@@ -145,3 +145,25 @@ body {
     width: 100%;
     height: auto;
 }
+
+/**************************/
+/*       ECRAN ADMIN     */
+/**************************/
+
+.buzz-list-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+}
+
+.buzz-square {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.buzz-mayo { background-color: #E0C800; }
+.buzz-ketchup { background-color: #C71000; }

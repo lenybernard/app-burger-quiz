@@ -5,6 +5,7 @@ module.exports = function (io) {
     const Transition = require(path.join(global.__basedir, 'app/models/transition'));
     const messages = require(path.join(global.__basedir, 'config/messages-socket'));
 
+    var buzzHits = [];
     var transitionsList = [];
 
     const teamMayo = new Team('mayo');
@@ -65,9 +66,11 @@ module.exports = function (io) {
                 buzzerIsLock = true;
                 teamMayo.points = 0;
                 teamKetchup.points = 0;
+                buzzHits = []
                 initTransitionList();
                 io.emit(messages.messageToClientReloadPart);
                 io.emit(messages.messageToClientReceiveStateBuzzer, buzzerIsLock);
+                io.emit(messages.messageToClientReceiveBuzzHits, buzzHits);
             });
             /**
              * Se produit lorsqu'un client buzz
@@ -75,7 +78,9 @@ module.exports = function (io) {
             socket.on(messages.messageClientSendBuzz, function (teamName) {
                 if (buzzerIsLock)
                     return;
+                buzzHits.push(teamName)
                 io.emit(messages.messageToClientReceiveBuzz, teamName);
+                io.emit(messages.messageToClientReceiveBuzzHits, buzzHits);
             });
 
             /**

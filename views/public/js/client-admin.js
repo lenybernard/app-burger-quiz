@@ -10,6 +10,8 @@ const messageLockBuzz= 'event-lock-buzz';
 const messageUnLockBuzz= 'event-unlock-buzz';
 const messageNextTransition= 'event-next-transition';
 const messageBuzzBadResponse = 'event-bad-response';
+const messageClientNeedBuzzHits = 'need-buzz-hits';
+const messageToClientReceiveBuzzHits = 'receive-buzz-hits';
 
 $buttonAddPointMayo = $('#button-add-point-mayo');
 $buttonRemovePointMayo = $('#button-remove-point-mayo');
@@ -24,6 +26,7 @@ $buttonReloadPart = $('#button-reload-part');
 $buttonNextTransition = $('#button-next-transition');
 
 $modalReloadPartWarn = $('#modal-reload-part');
+$buzzHitsBar = $('#buzzListDisplay');
 
 var initEvents = function () {
     $buttonAddPointMayo.click(function () {
@@ -56,4 +59,18 @@ var initEvents = function () {
     })
 }
 
+const initSocketAndListenEvents = function () {
+    socket.on(messageResetBuzzer, function () {
+        $buzzHitsBar.empty();
+    });
+    socket.on(messageToClientReceiveBuzzHits, function (buzzHits) {
+        $buzzHitsBar.empty();
+        buzzHits.forEach(buzz => {
+            const colorClass = buzz === 'team-mayo' ? 'buzz-mayo' : 'buzz-ketchup';
+            $buzzHitsBar.append(`<div class="buzz-square ${colorClass}"></div>`);
+        });
+    });
+};
+
 initEvents();
+initSocketAndListenEvents();
