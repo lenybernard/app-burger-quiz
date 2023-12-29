@@ -7,6 +7,7 @@ module.exports = function (io) {
 
     var buzzHits = [];
     var transitionsList = [];
+    var currentTransition = 0;
 
     const teamMayo = new Team('mayo');
     const teamKetchup = new Team('ketchup');
@@ -66,11 +67,18 @@ module.exports = function (io) {
                 buzzerIsLock = true;
                 teamMayo.points = 0;
                 teamKetchup.points = 0;
+                currentTransition = 0;
                 buzzHits = []
                 initTransitionList();
                 io.emit(messages.messageToClientReloadPart);
                 io.emit(messages.messageToClientReceiveStateBuzzer, buzzerIsLock);
                 io.emit(messages.messageToClientReceiveBuzzHits, buzzHits);
+                io.emit(messages.messageToClientNextTransitionLabel, transitionsList[1].label);
+            });
+            socket.on(messages.messageResetBuzzer, function () {
+                buzzerIsLock = true;
+                buzzHits = []
+                io.emit(messages.messageToClientReceiveBuzzHits, []);
             });
             /**
              * Se produit lorsqu'un client buzz
@@ -87,10 +95,41 @@ module.exports = function (io) {
              * Se charge d'envoyer la prochaine transition
              */
             socket.on(messages.messageNextTransition, function () {
-                var nextTransition = transitionsList.shift();
-                if (!nextTransition)
+                currentTransition++
+                var nextTransition = transitionsList[currentTransition];
+                if (!nextTransition) {
+                    io.emit(messages.messageToClientNextTransitionLabel, null);
                     return;
+                }
                 io.emit(messages.messageToClientNextTransition, nextTransition.filename);
+                nextTransition = transitionsList[currentTransition+1]
+                if (!nextTransition) {
+                    io.emit(messages.messageToClientNextTransitionLabel, null);
+                    return
+                }
+                io.emit(messages.messageToClientNextTransitionLabel, nextTransition.label);
+            });
+
+            /**
+             * Se charge d'envoyer la précédente transition
+             */
+            socket.on(messages.messagePrevTransition, function () {
+                if (currentTransition === 0) { return }
+                currentTransition--
+                var prevTransition = transitionsList[currentTransition];
+                if (!prevTransition)
+                    return;
+                io.emit(messages.messageToClientPrevTransition, prevTransition.filename);
+
+                var nextTransition = transitionsList[currentTransition+1]
+                io.emit(messages.messageToClientNextTransitionLabel, nextTransition.label);
+            });
+            socket.on(messages.messageClientNeedNextTransitionLabel, function () {
+                var nextTransition = transitionsList[currentTransition + 1];
+                io.emit(messages.messageToClientNextTransitionLabel, nextTransition ? nextTransition.label : null);
+            });
+            socket.on(messages.messageClientNeedBuzzHits, function () {
+                io.emit(messages.messageToClientReceiveBuzzHits, buzzHits);
             });
 
             /**

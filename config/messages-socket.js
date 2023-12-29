@@ -10,10 +10,12 @@ module.exports = Object.freeze({
      */
     messageAdd: 'add',
     messageReloadPart: 'event-reload-part',
+    messageResetBuzzer: 'event-reset-buzzer',
     messageMayoTeam: 'event-point-mayo',
     messageKetchupTeam: 'event-point-ketchup',
     messageLockBuzz: 'event-lock-buzz',
     messageUnLockBuzz: 'event-unlock-buzz',
+    messagePrevTransition: 'event-prev-transition',
     messageNextTransition: 'event-next-transition',
     messageBuzzBadResponse :'event-bad-response',
     messageBuzzGoodResponse :'event-good-response',
@@ -25,6 +27,7 @@ module.exports = Object.freeze({
     messageClientSendBuzz: 'on-buzz',
     messageClientsNeedPointsInformations: 'need-information-points',
     messageClientNeedStateBuzzer: 'need-state-buzzer',
+    messageClientNeedNextTransitionLabel: 'need-next-transition-label',
     messageClientNeedBuzzHits: 'need-buzz-hits',
     /**
      * Les messages à envoyer aux clients
@@ -39,6 +42,8 @@ module.exports = Object.freeze({
     messageToClientReceiveStateBuzzer:'receive-state-buzzer',
     messageToClientReceiveBuzzHits: 'receive-buzz-hits',
     messageToClientNextTransition: 'receive-next-transition',
+    messageToClientNextTransitionLabel: 'receive-next-transition-label',
+    messageToClientPrevTransition: 'receive-prev-transition',
     messageToClientReceiveBadResponse: 'receive-buzz-bad-response',
     messageToClientReceiveGoodResponse: 'receive-buzz-good-response',
     messageToClientReceiveSuspense: 'receive-suspense',
