@@ -7,7 +7,7 @@ module.exports = function (io) {
 
     var buzzHits = [];
     var transitionsList = [];
-    var currentTransition = 0;
+    var currentTransition = -1;
 
     const teamMayo = new Team('mayo');
     const teamKetchup = new Team('ketchup');
@@ -67,7 +67,7 @@ module.exports = function (io) {
                 buzzerIsLock = true;
                 teamMayo.points = 0;
                 teamKetchup.points = 0;
-                currentTransition = 0;
+                currentTransition = -1;
                 buzzHits = []
                 initTransitionList();
                 io.emit(messages.messageToClientReloadPart);
@@ -114,14 +114,12 @@ module.exports = function (io) {
              * Se charge d'envoyer la précédente transition
              */
             socket.on(messages.messagePrevTransition, function () {
-                if (currentTransition === 0) { return }
+
                 currentTransition--
                 var prevTransition = transitionsList[currentTransition];
-                if (!prevTransition)
-                    return;
-                io.emit(messages.messageToClientPrevTransition, prevTransition.filename);
 
                 var nextTransition = transitionsList[currentTransition+1]
+                if (!nextTransition) return
                 io.emit(messages.messageToClientNextTransitionLabel, nextTransition.label);
             });
             socket.on(messages.messageClientNeedNextTransitionLabel, function () {
